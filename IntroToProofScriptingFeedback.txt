@@ -1,0 +1,10 @@
+In `IntroToProofScripting.v`, there's a comment under `Ltac inster` which I think is incorrect: It says
+
+```
+(* Important: when one recursive call fails, the backtracking semantics of
+ * [match goal] cause us to try the next instantiation! *)
+```
+
+but there's nothing inside inster which could ever fail, because intuition is an alias for "intuition auto with *", and intuition only fails if its leaf tactic fails, but "auto with *" never fails. (And btw, one should never call "intuition" without an explicit leaf tactic, as we have painfully learnt in https://github.com/coq/coq/issues/4949 and https://github.com/mit-plv/bbv/pull/6).
+
+So in this implementation of inster, no backtracking caused by a failing recursive call happens, so we should either remove that comment (or even the whole example), or find an example where backtracking caused by a failing recursive call actually takes place.
